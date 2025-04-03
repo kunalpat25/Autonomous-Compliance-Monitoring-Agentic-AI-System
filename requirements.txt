@@ -1,0 +1,10 @@
+crewai>=0.22.0
+pandas
+faker
+openai
+google-generativeai
+streamlit
+python-dotenv
+sqlite-utils
+fuzzywuzzy
+python-Levenshtein
