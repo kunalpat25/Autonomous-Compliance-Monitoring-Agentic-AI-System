@@ -2,6 +2,7 @@ import pandas as pd
 from crewai import Crew
 from agents.transaction_scanner import create_transaction_scanner_agent, create_transaction_scanner_task
 from agents.customer_verifier import create_customer_verifier_agent, create_customer_verifier_task
+from agents.sanction_checker import create_sanction_checker_agent, create_sanction_checker_task
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
@@ -23,10 +24,14 @@ def main():
     verifier_agent = create_customer_verifier_agent()
     verifier_task = create_customer_verifier_task(transaction["customer_id"], verifier_agent)
 
+    # --- Agent 3: Sanction Checker ---
+    sanction_agent = create_sanction_checker_agent()
+    sanction_task = create_sanction_checker_task(transaction, sanction_agent)
+
     # Crew setup
     crew = Crew(
-        agents=[scanner_agent, verifier_agent],
-        tasks=[scanner_task, verifier_task]
+        agents=[scanner_agent, verifier_agent, sanction_agent],
+        tasks=[scanner_task, verifier_task, sanction_task]
     )
 
     result = crew.kickoff().to_dict()
